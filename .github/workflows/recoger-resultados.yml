@@ -1,1 +1,80 @@
+name: Recoger resultados
 
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: recoger-resultados
+
+jobs:
+  recoger:
+    if: startsWith(github.event.issue.title, '[resultado]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar y guardar el resultado
+        id: guardar
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const issue = context.payload.issue;
+            let ok = false;
+            try {
+              const m = (issue.body || '').match(/```json\s*([\s\S]*?)```/);
+              if (!m || m[1].length > 4000) throw new Error('formato');
+              const d = JSON.parse(m[1]);
+              const n = Number(d.n), score = Number(d.score);
+              if (![10, 15, 25].includes(n)) throw new Error('n');
+              if (!Number.isInteger(score) || score < 0 || score > n) throw new Error('score');
+              if (!Array.isArray(d.a) || d.a.length !== n) throw new Error('respuestas');
+              const a = d.a.map(x => [Number(x[0]), Number(x[1])]);
+              if (a.some(x => !Number.isInteger(x[0]) || x[0] < 0 || x[0] > 500 || !Number.isInteger(x[1]) || x[1] < 0 || x[1] > 3)) throw new Error('respuesta');
+              const rec = {
+                name: String(d.name || 'Anónimo').replace(/[\u0000-\u001f<>]/g, '').slice(0, 24) || 'Anónimo',
+                n, score,
+                streak: Math.min(Math.max(Number(d.streak) || 0, 0), n),
+                a,
+                ts: new Date().toISOString(),
+                by: issue.user.login
+              };
+              fs.mkdirSync('data', { recursive: true });
+              const f = 'data/results.json';
+              const all = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : [];
+              all.push(rec);
+              fs.writeFileSync(f, JSON.stringify(all, null, 1) + '\n');
+              ok = true;
+            } catch (e) {
+              core.warning('Resultado rechazado: ' + e.message);
+            }
+            core.setOutput('ok', ok ? 'true' : 'false');
+
+      - name: Subir el cambio
+        if: steps.guardar.outputs.ok == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/results.json
+          git commit -m "Nuevo resultado"
+          git pull --rebase
+          git push
+
+      - name: Cerrar el issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ok = '${{ steps.guardar.outputs.ok }}' === 'true';
+            await github.rest.issues.createComment({
+              ...context.repo, issue_number: context.issue.number,
+              body: ok ? 'Resultado registrado. Ya sales en la clasificación.' : 'No se pudo leer el resultado. Vuelve a enviarlo desde el juego.'
+            });
+            await github.rest.issues.update({
+              ...context.repo, issue_number: context.issue.number,
+              state: 'closed', state_reason: ok ? 'completed' : 'not_planned'
+            });
