@@ -54,7 +54,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font
 .opt.right{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
 .opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
 .opt.dim{opacity:.45}
-.stamp{position:absolute;right:14px;top:34px;font-family:var(--display);font-size:22px;letter-spacing:.06em;padding:2px 12px;border:4px solid;transform:rotate(-9deg);
+.stamp{position:absolute;right:14px;bottom:22px;font-family:var(--display);font-size:22px;letter-spacing:.06em;padding:2px 12px;border:4px solid;transform:rotate(-9deg);
   pointer-events:none;opacity:.92;animation:st .28s cubic-bezier(.2,1.6,.4,1)}
 .stamp.ok{color:var(--ok)} .stamp.no{color:var(--bad)}
 @keyframes st{from{transform:rotate(-9deg) scale(2);opacity:0}to{transform:rotate(-9deg) scale(1);opacity:.92}}
@@ -103,6 +103,26 @@ a.btn{display:inline-block;text-decoration:none}
 .rank{display:flex;flex-direction:column}
 .rk{display:grid;grid-template-columns:32px 1fr auto;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-family:var(--label);font-weight:700;font-size:20px;letter-spacing:.03em;font-variant-numeric:tabular-nums}
 .rk span:first-child{color:var(--rojo)} .rk span:nth-child(2){overflow-wrap:anywhere}
+
+.hero .band>div{min-width:0}
+.hero .body p{overflow-wrap:anywhere}
+.btns .btn{text-align:center}
+@media (max-width:480px){
+  .hero .band{padding:18px 16px;gap:12px}
+  .urn{width:58px}
+  .hero h1{font-size:clamp(24px,8.2vw,34px);overflow-wrap:anywhere}
+  .hero .kick{font-size:12px;letter-spacing:.14em}
+  .hero .body{padding:18px 16px}
+  .card.ballot{padding:28px 16px 18px}
+  .stamp{font-size:15px;border-width:3px;right:10px;bottom:20px;padding:1px 8px}
+  .btn{font-size:17px;padding:10px 16px}
+  .btns{flex-direction:column}
+  .btns .btn{width:100%}
+  .res{padding:20px 16px}
+  .row{grid-template-columns:30px 66px 1fr 40px;gap:8px;font-size:16px}
+  .brand{font-size:13px}
+  .opt{font-size:20px}
+}
 </style>
 </head>
 <body>
@@ -119,7 +139,7 @@ a.btn{display:inline-block;text-decoration:none}
 <div class="flag"></div>
 
 <script>
-var REPO="davi7873/adivina-el-partido";
+var REPO="TU_USUARIO/TU_REPO";
 var BRANCH="main";
 var NAME="";
 var P=["VOX","PP","PSOE","Sumar"];
@@ -196,11 +216,9 @@ function intro(){
   app.innerHTML='<section class="card hero"><div class="band">'+URN+'<div><div class="kick">Programas electorales</div><h1>Adivina el programa</h1></div></div>'+
    '<div class="body"><p><b>Camarada '+esc(NAME)+'.</b> Te leo una propuesta de los programas de 2023. Tú marcas de qué partido es.</p>'+
    '<div><div class="lab" style="margin-bottom:8px">Los cuatro programas</div><div class="cast">'+P.map(function(p,k){return '<span style="display:flex;align-items:center;gap:8px;font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase">'+badge(k)+p+'</span>'}).join("")+'</div></div>'+
-   '<div><div class="lab" style="margin-bottom:8px">Preguntas por ronda</div><div class="chips" id="chips">'+[10,15,25].map(function(n){return '<button class="chip" type="button" data-n="'+n+'" aria-pressed="'+(n===N)+'">'+n+'</button>'}).join("")+
-   '<span class="lab" id="bst">'+(b?"Tu mejor marca: "+b+" aciertos":"")+'</span></div></div>'+
-   '<div class="btns"><button class="btn" id="go" type="button">Empezar</button><button class="btn alt" id="rk" type="button">Clasificación</button><button class="btn alt" id="nm" type="button">Cambiar nombre</button></div></div></section>';
-  document.querySelectorAll(".chip").forEach(function(c){c.onclick=function(){N=+c.dataset.n;document.querySelectorAll(".chip").forEach(function(d){d.setAttribute("aria-pressed",d===c)});var bb=best(N);$("bst").textContent=bb?"Tu mejor marca: "+bb+" aciertos":""}});
-  $("go").onclick=start;$("go").focus();$("rk").onclick=ranking;$("nm").onclick=gate;
+   (b?'<div class="lab">Tu mejor marca: '+b+' aciertos</div>':'')+
+   '<div class="btns"><button class="btn" id="go" type="button">Empezar</button></div></div></section>';
+  $("go").onclick=start;$("go").focus();
 }
 function start(){
   S={qs:shuffle(Q).slice(0,N),i:0,ok:0,streak:0,best:0,log:[],ans:null,by:[0,1,2,3].map(function(){return[0,0]})};
@@ -249,11 +267,11 @@ function results(){
     sendBtn='<a class="btn" href="'+url+'" target="_blank" rel="noopener">Enviar a la clasificación</a>';
   }
   app.innerHTML='<section class="card res"><h2>'+m+'</h2>'+hemi()+'<div class="big">'+S.ok+'<span> / '+N+'</span></div>'+
-   '<p style="margin:0;text-align:center" class="lab">Mejor racha '+S.best+' · Tu mejor marca con '+N+' preguntas: '+b+'</p>'+
+   '<p style="margin:0;text-align:center" class="lab">Mejor racha '+S.best+' · Tu mejor marca: '+b+'</p>'+
    '<div class="rows">'+P.map(function(p,k){var a=S.by[k],w=a[1]?a[0]/a[1]*100:0;return '<div class="row">'+badge(k)+'<span>'+p+'</span><span class="t"><i style="width:'+w+'%"></i></span><span>'+(a[1]?a[0]+"/"+a[1]:"–")+'</span></div>'}).join("")+'</div>'+
    (fails.length?'<div><div class="lab" style="margin-bottom:8px">Para repasar</div><div class="rev">'+fails.map(function(l){return '<div>'+l.q[1]+' <b>→ '+P[l.q[2]]+'</b> (marcaste '+P[l.k]+')</div>'}).join("")+'</div></div>':"")+
-   '<div class="btns">'+sendBtn+'<button class="btn" id="again" type="button">Otra ronda</button><button class="btn alt" id="menu" type="button">Cambiar longitud</button><button class="btn alt" id="cp" type="button">Copiar resultado</button></div></section>';
-  $("again").onclick=start;$("menu").onclick=intro;$("again").focus();
+   '<div class="btns">'+sendBtn+'<button class="btn" id="again" type="button">Otra ronda</button><button class="btn alt" id="cp" type="button">Copiar resultado</button></div></section>';
+  $("again").onclick=start;$("again").focus();
   $("cp").onclick=function(){var t="Adivina el programa: "+S.ok+"/"+N+" (racha "+S.best+")";var el=$("cp");
     try{navigator.clipboard.writeText(t).then(function(){el.textContent="Copiado"},function(){el.textContent=t})}catch(e){el.textContent=t}};
 }
@@ -267,17 +285,6 @@ function gate(){
   $("gf").onsubmit=function(e){e.preventDefault();NAME=$("who").value.trim().replace(/\s+/g," ")||"Anónimo";
     try{localStorage.setItem("apname",NAME)}catch(x){}intro()};
   $("who").focus();
-}
-function ranking(){
-  S={intro:true};
-  app.innerHTML='<section class="card res"><h2>Clasificación</h2><div id="rk-body" class="lab">Cargando…</div><div class="btns"><button class="btn alt" id="bk" type="button">Volver</button></div></section>';
-  $("bk").onclick=intro;
-  fetch("https://raw.githubusercontent.com/"+REPO+"/"+BRANCH+"/data/results.json?t="+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(all){
-    all=all.slice().sort(function(a,b){return b.score/b.n-a.score/a.n||b.n-a.n||(a.ts<b.ts?-1:1)}).slice(0,20);
-    if(!all.length)throw 0;
-    $("rk-body").className="";
-    $("rk-body").innerHTML='<div class="rank">'+all.map(function(r,i){return '<div class="rk"><span>'+(i+1)+'</span><span>'+esc(r.name)+'</span><span>'+r.score+'/'+r.n+'</span></div>'}).join("")+'</div>';
-  }).catch(function(){$("rk-body").textContent="Aún no hay resultados. Sé el primero en enviar el tuyo."});
 }
 document.addEventListener("keydown",function(e){
   if(S.intro||S.ans===undefined||S.i>=N)return;
