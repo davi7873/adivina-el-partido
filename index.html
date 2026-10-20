@@ -255,7 +255,7 @@ function intro(){
   S={intro:true};$("hud").hidden=true;$("pips").hidden=true;
   var b=best(N);
   app.innerHTML='<section class="card hero"><div class="band">'+URN+'<div><div class="kick">Programas electorales</div><h1>Adivina el programa</h1></div></div>'+
-   '<div class="body"><p><b>Camarada '+esc(NAME)+'.</b> Te leo 15 propuestas, elegidas al azar entre 90, de los programas de 2023. Tú marcas de qué partido es.</p>'+
+   '<div class="body"><p><b>Camarada '+esc(NAME)+'.</b> Te leo 15 propuestas, elegidas al azar entre 90, de los programas de 2026. Tú marcas de qué partido es.</p>'+
    '<div><div class="lab" style="margin-bottom:8px">Los cuatro programas</div><div class="cast">'+P.map(function(p,k){return '<span style="display:flex;align-items:center;gap:8px;font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase">'+badge(k)+p+'</span>'}).join("")+'</div></div>'+
    (b?'<div class="lab">Tu mejor marca: '+b+' aciertos</div>':'')+
    '<div class="btns"><button class="btn" id="go" type="button">Empezar</button></div></div></section>';
