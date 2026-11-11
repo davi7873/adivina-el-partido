@@ -127,6 +127,9 @@ a.btn{display:inline-block;text-decoration:none}
 </head>
 <body>
 
+<form name="resultados" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input name="bot-field"><input name="alias"><input name="aciertos"><input name="total"><input name="racha">
+</form>
 <div class="flag"></div>
 <div class="page"><div class="wrap">
   <div class="top">
@@ -139,8 +142,6 @@ a.btn{display:inline-block;text-decoration:none}
 <div class="flag"></div>
 
 <script>
-var REPO="TU_USUARIO/TU_REPO";
-var BRANCH="main";
 var NAME="";
 var P=["VOX","PP","PSOE","Sumar"];
 var SHAPES=[
@@ -301,20 +302,20 @@ function results(){
   hud();var b=best(N,S.ok),r=S.ok/N;
   var m=r>=.85?"Tienes los programas en la cabeza.":r>=.6?"Buen nivel. Sabes leer entre líneas.":r>=.35?"Muchas propuestas se parecen. Hay margen.":"Los programas te han sorprendido. Otra ronda.";
   var fails=S.log.filter(function(l){return!l.good});
-  var sendBtn="";
-  if(REPO.indexOf("TU_")!==0){
-    var pay={v:1,name:NAME,n:N,score:S.ok,streak:S.best,a:S.log.map(function(l){return[Q.indexOf(l.q),l.k]})};
-    var url="https://github.com/"+REPO+"/issues/new?title="+encodeURIComponent("[resultado] "+NAME+" "+S.ok+"/"+N)+"&body="+encodeURIComponent("```json\n"+JSON.stringify(pay)+"\n```\n\nPulsa «Submit new issue» para enviar tu resultado a la clasificación.");
-    sendBtn='<a class="btn" href="'+url+'" target="_blank" rel="noopener">Enviar a la clasificación</a>';
-  }
   app.innerHTML='<section class="card res"><h2>'+m+'</h2>'+hemi()+'<div class="big">'+S.ok+'<span> / '+N+'</span></div>'+
    '<p style="margin:0;text-align:center" class="lab">Mejor racha '+S.best+' · Tu mejor marca: '+b+'</p>'+
    '<div class="rows">'+P.map(function(p,k){var a=S.by[k],w=a[1]?a[0]/a[1]*100:0;return '<div class="row">'+badge(k)+'<span>'+p+'</span><span class="t"><i style="width:'+w+'%"></i></span><span>'+(a[1]?a[0]+"/"+a[1]:"–")+'</span></div>'}).join("")+'</div>'+
    (fails.length?'<div><div class="lab" style="margin-bottom:8px">Para repasar</div><div class="rev">'+fails.map(function(l){return '<div>'+l.q[1]+' <b>→ '+P[l.q[2]]+'</b> (marcaste '+P[l.k]+')</div>'}).join("")+'</div></div>':"")+
-   '<div class="btns">'+sendBtn+'<button class="btn" id="again" type="button">Otra ronda</button><button class="btn alt" id="cp" type="button">Copiar resultado</button></div></section>';
+   '<p class="note" id="sent" aria-live="polite">Enviando tu resultado…</p>'+
+   '<div class="btns"><button class="btn" id="again" type="button">Otra ronda</button></div></section>';
   $("again").onclick=start;$("again").focus();
-  $("cp").onclick=function(){var t="Adivina el programa: "+S.ok+"/"+N+" (racha "+S.best+")";var el=$("cp");
-    try{navigator.clipboard.writeText(t).then(function(){el.textContent="Copiado"},function(){el.textContent=t})}catch(e){el.textContent=t}};
+  enviar();
+}
+function enviar(){
+  var el=$("sent"),body=new URLSearchParams({"form-name":"resultados","bot-field":"",alias:NAME,aciertos:S.ok,total:N,racha:S.best}).toString();
+  function fin(ok){var e=$("sent");if(e)e.textContent=ok?"Resultado enviado.":"No se pudo enviar tu resultado."}
+  try{fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:body})
+    .then(function(r){fin(r.ok)},function(){fin(false)})}catch(e){fin(false)}
 }
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function gate(){
