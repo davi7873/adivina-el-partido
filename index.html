@@ -143,6 +143,7 @@ a.btn{display:inline-block;text-decoration:none}
 
 <script>
 var NAME="";
+var DELAY=2200;
 var P=["VOX","PP","PSOE","Sumar"];
 var SHAPES=[
  '<circle class="sh" cx="20" cy="20" r="19"/>',
@@ -158,51 +159,40 @@ var URN='<svg class="urn" viewBox="0 0 92 100" aria-hidden="true"><path d="M30 6
 var Q=[
 ["Impuestos","Tipo único del 15% en el IRPF hasta 70.000 € y del 25% por encima.",0],
 ["Impuestos","Impuesto permanente a las grandes fortunas de al menos el 4%.",3],
-["Impuestos","Bajada temporal del IVA de la carne, el pescado y las conservas.",1],
 ["Impuestos","Un Pacto contra el Fraude fiscal.",2],
 ["Impuestos","IRPF de hasta el 52% a partir de 300.000 € de renta.",3],
 ["Déficit","Presupuestos de base cero para eliminar déficit y deuda.",0],
 ["Déficit","Rechazar los límites del 3% de déficit y el 60% de deuda.",3],
 ["Déficit","Revisión sistemática del gasto público y equilibrio de la Seguridad Social.",2],
-["Déficit","Revisar las cuentas con la Intervención General del Estado y reforzar la Autoridad Independiente de Responsabilidad Fiscal (AIReF).",1],
 ["Empleo","Jornada máxima de 37,5 horas en 2024 y 32 después, sin bajar salarios.",3],
 ["Empleo","Bonificar el 100% de las cotizaciones el primer año a indefinidos de trabajadores españoles.",0],
-["Empleo","Tarifa 0 para los nuevos autónomos.",1],
 ["Empleo","Salario mínimo igual al 60% del salario medio.",2],
 ["Pensiones","Pensiones contributivas exentas de IRPF.",0],
-["Pensiones","Cuentas individuales portables.",1],
 ["Pensiones","Subir las mínimas y las no contributivas hasta el umbral de pobreza.",3],
 ["Vivienda","Derogar la Ley de Vivienda y poner IVA cero a la primera vivienda.",0],
-["Vivienda","Avales para menores de 35 años de hasta el 95% de la hipoteca.",1],
 ["Vivienda","Plan de Alquiler Asequible con 50.000 viviendas de la Sareb, el «banco malo».",2],
 ["Vivienda","1% del PIB durante diez años para más de 2 millones de viviendas protegidas.",3],
 ["Sanidad","Eliminar el copago farmacéutico.",2],
-["Sanidad","Plan de choque en Atención Primaria con 1.000 plazas más de medicina de familia.",1],
 ["Sanidad","Devolver las competencias sanitarias al Estado, con tarjeta e historia clínica únicas.",0],
 ["Educación","Convertir la escuela concertada en subsidiaria de la pública.",3],
 ["Educación","Cheque escolar para elegir centro.",0],
 ["Inmigración","Bloqueo naval y expulsión inmediata de quien entre de forma ilegal.",0],
 ["Inmigración","Cierre de los centros de internamiento de extranjeros (CIE).",3],
-["Inmigración","Aplicar el Pacto Europeo de Migración y Asilo y reforzar la agencia europea de fronteras (Frontex).",1],
 ["Inmigración","Reformar el arraigo y aprobar una ley de nacionalidad.",2],
 ["Territorio","Suprimir las policías autonómicas.",0],
-["Territorio","Recuperar los delitos de sedición y malversación anteriores a la reforma de 2022.",1],
 ["Territorio","Definir España como plurinacional y mantener una mesa de diálogo con la Generalitat.",3],
 ["Territorio","Nueva financiación autonómica en un año, dentro de la Constitución.",2],
 ["Energía","Salir del Acuerdo de París.",0],
 ["Energía","90% de electricidad renovable en 2030 y moratoria a nuevas nucleares.",3],
 ["Energía","Apostar por los pequeños reactores nucleares modulares.",0],
 ["Energía","Revisar «siempre al alza» los compromisos climáticos europeos.",2],
-["Exterior","Gastar el 2% del PIB en defensa y llegar a 140.000 efectivos.",1],
 ["Exterior","Desplazar progresivamente las garantías de la OTAN hacia una autonomía europea.",3],
 ["Exterior","Exigir que la OTAN proteja Ceuta y Melilla.",0],
 ["Exterior","Impulsar una Europa de la defensa mediante la cooperación estructurada permanente.",2],
 ["Derechos","Derogar la Ley de Violencia de Género y suprimir el Ministerio de Igualdad.",0],
-["Derechos","Exigir el consentimiento paterno para el aborto de menores.",1],
 ["Derechos","Abolir la prostitución y oponerse a la gestación subrogada.",2],
 ["Derechos","Recuperar los juzgados de violencia de género.",3],
 ["Justicia","Integrar el Tribunal Constitucional en el Tribunal Supremo.",0],
-["Justicia","Mandato de cinco años para el fiscal general.",1],
 ["Justicia","Crear una Agencia Anticorrupción.",2],
 ["Justicia","Aprobar una nueva ley de indultos y un Consejo General del Poder Judicial con protagonismo parlamentario y paridad.",3],
 ["Asistencia social","Crear una red nacional de albergues y comedores sociales.",0],
@@ -218,14 +208,6 @@ var Q=[
 ["Vivienda","Eximir del IBI a los propietarios de viviendas okupadas ilegalmente mientras dure la ocupación.",0],
 ["Vivienda","Impedir que los okupas y los inmigrantes ilegales puedan empadronarse.",0],
 ["Exterior","Suprimir todas las oficinas de implantación de la Agenda 2030.",0],
-["Agua","Un Pacto Nacional del Agua con todas las comunidades autónomas.",1],
-["Instituciones","Reforzar la Ley del Consejo de Estado para que pueda informar sobre proyectos de ley aunque el Gobierno no se lo pida.",1],
-["Seguridad","Reformar el Código Penal en materia de multirreincidencia en hurtos y estafas.",1],
-["Seguridad","Un plan de seguridad especial contra la violencia de las bandas juveniles.",1],
-["Administración","Reconocer el derecho a la explicación digital y reformar el lenguaje administrativo para que se entienda.",1],
-["Instituciones","Una nueva ley de secretos oficiales e información clasificada adaptada a las nuevas tecnologías.",1],
-["Educación","Una Evaluación de Acceso a la Universidad (EBAU) común para todo el territorio.",1],
-["Sanidad","Un Plan Nacional contra las agresiones a los profesionales sanitarios.",1],
 ["Educación","Aprobar de forma definitiva el Estatuto del Becario.",2],
 ["Agua","Duplicar en 2027 la capacidad de las desaladoras, alimentadas con energía renovable.",2],
 ["Educación","Crear el Observatorio de la Equidad Educativa.",2],
@@ -245,7 +227,29 @@ var Q=[
 ["Transporte","Lograr que en 2040 no circulen en España vehículos con motor de combustión.",3],
 ["Libertades","Reformar o derogar la «ley mordaza».",3],
 ["Administración","Fijar una tasa de reposición de las plantillas públicas con marcos plurianuales.",3],
-["Justicia","Suprimir la justicia militar e integrarla en la jurisdicción ordinaria.",3]
+["Justicia","Suprimir la justicia militar e integrarla en la jurisdicción ordinaria.",3],
+["Impuestos","Una deducción familiar única, reembolsable y mensual, también para quienes no tengan cuota en el IRPF.",1],
+["Impuestos","Jóvenes de 18 a 35 años sin IRPF el primer año y pagando el 25%, el 50% y el 75% en los tres siguientes.",1],
+["Empleo","Autónomos exentos de IVA si facturan menos de 85.000 euros.",1],
+["Economía","Reducir las cargas administrativas un 25% (un 35% para las pymes) antes de 2029.",1],
+["Déficit","Una auditoría del gasto público en los primeros 100 días, que marque los primeros presupuestos.",1],
+["Sanidad","Al menos 4.500 médicos más en Atención Primaria.",1],
+["Sanidad","Un Plan Nacional de Salud Mental 2027-2037 con financiación garantizada.",1],
+["Educación","Conciertos educativos de al menos seis años en todas las etapas.",1],
+["Educación","Cuentas en redes sociales prohibidas a menores de 14 años y autorización paterna hasta los 16.",1],
+["Vivienda","Licencias de obra en tres meses, con silencio positivo.",1],
+["Vivienda","IVA del 4% en la primera vivienda de los menores de 40 años.",1],
+["Energía","Derogar el calendario de cierre nuclear y prorrogar Almaraz, Ascó, Vandellós, Cofrentes y Trillo.",1],
+["Energía","Una Tarifa Social Única que sustituya a los bonos eléctrico y térmico.",1],
+["Instituciones","Disolver las Cortes si hay una segunda prórroga presupuestaria consecutiva.",1],
+["Seguridad","Multa mínima de 3.000 euros por vandalismo en desórdenes multitudinarios.",1],
+["Inmigración","Identificar en siete días a quien entre ilegalmente y devolverlo con el mecanismo europeo.",1],
+["Inmigración","Prohibir por ley las regularizaciones colectivas.",1],
+["Justicia","Cese inmediato del fiscal general si es procesado.",1],
+["Transparencia","Un registro público y obligatorio de lobbies.",1],
+["Pensiones","Actualizar las pensiones con el IPC aunque no haya presupuestos, mediante una proposición de ley.",1],
+["Familia","Que el concebido no nacido cuente para las ayudas familiares.",1],
+["Exterior","Una ley de programación y financiación de la defensa.",1]
 ];
 var app=document.getElementById("app"),S={},N=15;
 function $(i){return document.getElementById(i)}
@@ -256,14 +260,14 @@ function intro(){
   S={intro:true};$("hud").hidden=true;$("pips").hidden=true;
   var b=best(N);
   app.innerHTML='<section class="card hero"><div class="band">'+URN+'<div><div class="kick">Programas electorales</div><h1>Adivina el programa</h1></div></div>'+
-   '<div class="body"><p><b>Camarada '+esc(NAME)+'.</b> Te leo 15 propuestas, elegidas al azar entre 90, de los programas de 2026. Tú marcas de qué partido es.</p>'+
+   '<div class="body"><p><b>Camarada '+esc(NAME)+'.</b> Te leo 15 propuestas, elegidas al azar entre '+Q.length+'. Las del PP son de su programa de 2026; las de PSOE, Vox y Sumar, de sus programas de 2023, hasta que publiquen los nuevos. Tú marcas de qué partido es.</p>'+
    '<div><div class="lab" style="margin-bottom:8px">Los cuatro programas</div><div class="cast">'+P.map(function(p,k){return '<span style="display:flex;align-items:center;gap:8px;font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase">'+badge(k)+p+'</span>'}).join("")+'</div></div>'+
    (b?'<div class="lab">Tu mejor marca: '+b+' aciertos</div>':'')+
    '<div class="btns"><button class="btn" id="go" type="button">Empezar</button></div></div></section>';
   $("go").onclick=start;$("go").focus();
 }
 function start(){
-  S={qs:shuffle(Q).slice(0,N),i:0,ok:0,streak:0,best:0,log:[],ans:null,by:[0,1,2,3].map(function(){return[0,0]})};
+  clearTimeout(S.timer);S={qs:shuffle(Q).slice(0,N),i:0,ok:0,streak:0,best:0,log:[],ans:null,by:[0,1,2,3].map(function(){return[0,0]})};
   $("hud").hidden=false;$("pips").hidden=false;render();
 }
 function hud(){
@@ -288,9 +292,8 @@ function answer(k){
     o.classList.add(j===c?"right":j===k?"wrong":"dim")});
   var last=S.i===N-1;
   var card=app.querySelector(".card");card.insertAdjacentHTML("beforeend",'<div class="stamp '+(good?"ok":"no")+'">'+(good?"ACIERTO":"FALLO")+'</div>');
-  $("fb").innerHTML='<div class="fb"><p>'+(good?"<b>Correcto.</b> ":"<b>No era "+P[k]+".</b> ")+'Esa propuesta es del programa de <b>'+P[c]+'</b>.</p>'+
-    '<button class="btn" id="nx" type="button">'+(last?"Ver resultado":"Siguiente")+'</button></div>';
-  var nx=$("nx");nx.onclick=function(){S.i++;render()};nx.focus();hud();
+  $("fb").innerHTML='<div class="fb"><p>'+(good?"<b>Correcto.</b> ":"<b>No era "+P[k]+".</b> ")+'Esa propuesta es del programa de <b>'+P[c]+'</b>.</p></div>';
+  hud();clearTimeout(S.timer);S.timer=setTimeout(function(){S.i++;render()},DELAY);
 }
 function hemi(){
   var W=240,R=104,cx=120,cy=116,n=N,sp=Math.PI*R/(n-1),r=Math.min(10,sp*.38),out="";
